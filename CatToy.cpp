@@ -21,6 +21,8 @@ int main(int argc, char **argv)
 	CatToy ct;
 
 	ct.startUp();
+	
+	cout << "back from startUp\n";
 
 	return 0;
 }
