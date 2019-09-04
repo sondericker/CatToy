@@ -5,9 +5,11 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <wiringPi.h>
 #include "CatToy.h"
 #include "PWMDriver.h"
-#include <wiringPi.h>
+#include "MotionProfile.h"
+
 
 
 using namespace std;
@@ -23,6 +25,8 @@ int main(int argc, char **argv)
 	ct.startUp();
 	
 	cout << "back from startUp\n";
+	
+	MotionProfile mp1();
 
 	return 0;
 }
