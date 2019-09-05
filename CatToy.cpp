@@ -6,6 +6,8 @@
 #include <iostream>
 #include <stdlib.h>
 #include <wiringPi.h>
+#include <sys/time.h>
+
 #include "CatToy.h"
 #include "PWMDriver.h"
 #include "MotionProfile.h"
@@ -54,15 +56,45 @@ void CatToy::startUp() {
 	
 	while (true) {
 		for (int i=lowVal; i< highVal; i++) {
-			pwm.setPWM(0, 0x000, i);		// should be 50% PWM value
+
+			pwm.setPWM(0, 0x000, i);		// it takes about 3ms to setPWM
 			pwm.setPWM(1, 0x000, i);
-			delayMicroseconds(1000);	
+
+			
 		}
 					cout << "Done.\n";
+					
 					pwm.setPWM(0,0x00, lowVal);				// send them back to the beginning
 					pwm.setPWM(1,0x00, lowVal);
-					delayMicroseconds(500000);
+					delayMicroseconds(450000);
 	}	
+	
+}
+
+
+void CatToy::printTime () {
+	
+    struct timeval start, end;
+
+    long mtime, seconds, useconds;    
+
+    gettimeofday(&start, NULL);
+    gettimeofday(&end, NULL);
+
+//    seconds  = end.tv_sec  - start.tv_sec;
+//    useconds = end.tv_usec - start.tv_usec; 
+    
+    seconds  = start.tv_sec;
+    useconds = start.tv_usec;    
+
+    mtime = ((seconds) * 1000000 + useconds);
+    
+    cout << "Time: " << mtime << endl;
+
+   // printf("Elapsed time: %ld\n", mtime);
+	
+	
+	
 	
 }
 
