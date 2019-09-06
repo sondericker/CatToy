@@ -78,3 +78,60 @@ void TerminalUI::clearTerminal() {
 	system("CLS");
 	
 }
+
+
+void printMenu() {
+	
+	clearTerminal();
+	
+	cout << "Main Menu" << endl << endl;
+	
+	cout << "p - Print profile" << endl;
+	cout << "c - Clear profile" << endl;
+	cout << "a - Add steps to profile" << endl;
+	cout << "e - Edit profile step" << endl;
+	cout << "d - Delete profile step" << endl;
+	cout << "r - Run profile" << endl;
+	cout << "s - Save profile" << endl;
+	cout << "l - Load profile" << endl;
+	
+}
+
+char getCommand() {
+	
+	bool gotCommand = false;
+	string inText;
+	
+	printMenu();
+	
+	
+	while (!gotCommand) {
+		
+		cout << "Command:";
+		cin >> inText;
+		if (inText.length==1) {
+			
+		// got a single character
+		if ((intext.front == 'p') ||
+			(intext.front == 'c') ||
+			(intext.front == 'a') ||
+			(intext.front == 'e') ||
+			(intext.front == 'd') ||
+			(intext.front == 'r') ||
+			(intext.front == 's') ||
+			(intext.front == 'l')) {
+			return(inText.front);
+		}
+			
+		cout << "Invalid command. Valid options are p, c, a, e, d, r, s and l" << endl;
+			
+	}
+		
+		
+		
+		
+		
+		
+		
+	}
+	
