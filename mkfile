@@ -1,6 +1,6 @@
 
-CatToy:CatToy.o PWMDriver.o MotionProfile.o ServoUpdater.o
-	g++ -Wall -g -o CatToy CatToy.o PWMDriver.o MotionProfile.o ServoUpdater.o -L/sw/lib/root -lwiringPi -lpthread
+CatToy:CatToy.o PWMDriver.o MotionProfile.o ServoUpdater.o TerminalUI.o
+	g++ -Wall -g -o CatToy CatToy.o PWMDriver.o MotionProfile.o ServoUpdater.o TerminalUI.o -L/sw/lib/root -lwiringPi -lpthread
 
 
 CatToy.o:CatToy.cpp CatToy.h
@@ -14,6 +14,9 @@ MotionProfile.o:MotionProfile.cpp MotionProfile.h
     
 ServoUpdater.o:ServoUpdater.cpp ServoUpdater.h
 	g++ -Wall -g -c -pthread -I/sw/include/root -lpthread  ServoUpdater.cpp 
+
+TerminalUI.o:TerminalUI.cpp TerminalUI.h
+	g++ -Wall -g -c -pthread -I/sw/include/root -lpthread TerminalUI.cpp
 
     
 

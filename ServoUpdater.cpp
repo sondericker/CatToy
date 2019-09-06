@@ -1,6 +1,5 @@
 
 #include <iostream>
-#include <pthread.h>
 #include <unistd.h>
 #include "PWMDriver.h"
 #include <wiringPi.h>
@@ -95,15 +94,14 @@ void ServoUpdater::updater() {
 		
 		long mtime = ((end.tv_sec) * 1000000000 + end.tv_usec * 1000) - ((start.tv_sec) * 1000000000 + start.tv_usec * 1000);		// number of nanoseconds
 		struct timespec tp;
-		if (mtime > 0) {
-			tp.tv_sec = 0;
-			tp.tv_nsec = (1000000000/UPDATER_FREQUENCY_HZ) - mtime;	// 1 billion nano seconds / update frequency - how long it took to run the loop
-			cout << "Was gone for:" << mtime << " nanoseconds so sleeping for:" << tp.tv_nsec << " nanoseconds." << endl;
+		tp.tv_sec = 0;
+		tp.tv_nsec = (1000000000/UPDATER_FREQUENCY_HZ) - mtime;	// 1 billion nano seconds / update frequency - how long it took to run the loop		
 
-		} else {
-			tp.tv_sec = 0;			// something went wrong with the timers so just sleep for 1us
-			tp.tv_nsec = 1000;
+		if (tp.tv_nsec < 0) {
+			tp.tv_nsec = 1000;	// run time is limited by execution speed. Just wait 1us
 		}
+		
+	//	cout << "Was gone for:" << mtime << " nanoseconds so sleeping for:" << tp.tv_nsec << " nanoseconds." << endl;		
 		nanosleep(&tp, NULL);		// updater runs every 1/UPDATE_FREQUENCY_HZ seconds
 
 	}
@@ -127,7 +125,7 @@ void ServoUpdater::updateServos() {
 	} else {
 		int lowVal = .5/10 * 0xfff;
 		int highVal = 2.5/10 * 0xfff;
-		cout << "lowVal = " << lowVal << " highVal = " << highVal << endl;
+	//	cout << "lowVal = " << lowVal << " highVal = " << highVal << endl;
 		
 		curPosA = lowVal;
 		curPosB = lowVal;		
