@@ -11,22 +11,25 @@ using namespace std;
 TerminalUI::TerminalUI(ServoUpdater sUp) {
 
 	sUpdater = sUp;
+	char command = getCommand();
+	cout << "Received command:" << command << endl;
 	driveToPosition();
+	
 
 }
 
 
 void TerminalUI::driveToPosition() {
-	
-	system("clear");
+	bool running = true;
 
+	system("clear");
 	cout << "Use wasd to move the laser into position and then hit Enter to set." << endl;
 	
+	// Set terminal to raw mode 
 	system("stty raw"); 
-	bool running = true;
-	
+	sUpdater.goToPos(0.5, 0.5, 1.0); 		// center the laser
+	// Loop while the laser is driven around
 	while (running) {
-		// Set terminal to raw mode 
 
 		// Wait for single character 
 		char input = getchar(); 
@@ -61,29 +64,23 @@ void TerminalUI::driveToPosition() {
 		
 		// Echo input:
 		// cout << "--" << input << "--";
-
-		// Reset terminal to normal "cooked" mode 
 				
 	}
-	
-	system("stty cooked"); 		
+
+	// Reset terminal to normal "cooked" mode 
+	system("stty cooked"); 	
+	// clean up the screen	
 	system("clear");
 		
 }
 
 
 
-void TerminalUI::clearTerminal() {
-	
-	system("CLS");
-	
-}
 
-
-void printMenu() {
+void TerminalUI::printMenu() {
 	
-	clearTerminal();
-	
+	system("clear");
+		
 	cout << "Main Menu" << endl << endl;
 	
 	cout << "p - Print profile" << endl;
@@ -97,41 +94,37 @@ void printMenu() {
 	
 }
 
-char getCommand() {
+char TerminalUI::getCommand() {
 	
-	bool gotCommand = false;
 	string inText;
 	
 	printMenu();
 	
 	
-	while (!gotCommand) {
+	while (true) {
 		
 		cout << "Command:";
 		cin >> inText;
-		if (inText.length==1) {
+		if (inText.length() == 1) {
 			
-		// got a single character
-		if ((intext.front == 'p') ||
-			(intext.front == 'c') ||
-			(intext.front == 'a') ||
-			(intext.front == 'e') ||
-			(intext.front == 'd') ||
-			(intext.front == 'r') ||
-			(intext.front == 's') ||
-			(intext.front == 'l')) {
-			return(inText.front);
-		}
+		// if input is a proper command return with it. Otherwise call it out and get another.
+			if ((inText.front() == 'p') ||
+				(inText.front() == 'c') ||
+				(inText.front() == 'a') ||
+				(inText.front() == 'e') ||
+				(inText.front() == 'd') ||
+				(inText.front() == 'r') ||
+				(inText.front() == 's') ||
+				(inText.front() == 'q') ||
+				(inText.front() == 'l')) {
+				return(inText.front());
+			}
+		}		
 			
-		cout << "Invalid command. Valid options are p, c, a, e, d, r, s and l" << endl;
+		cout << "Invalid command. Valid options are p, c, a, e, d, r, s, q and l" << endl;
 			
 	}
 		
 		
-		
-		
-		
-		
-		
-	}
+}
 	

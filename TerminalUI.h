@@ -17,7 +17,7 @@ class TerminalUI {
 	ServoUpdater sUpdater;
 	
 	void driveToPosition();
-	void clearTerminal();
-
+	void printMenu();
+	char getCommand();
 
 };
