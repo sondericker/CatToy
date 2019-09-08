@@ -7,7 +7,6 @@ class TerminalUI {
 
 	protected:
 
-
 	private:
 	double panPos;
 	int panPosTicks;
@@ -19,5 +18,6 @@ class TerminalUI {
 	void driveToPosition();
 	void printMenu();
 	char getCommand();
-
+	void runUI();
+	
 };

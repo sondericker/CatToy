@@ -7,11 +7,11 @@
 #include <stdlib.h>
 #include <wiringPi.h>
 #include <sys/time.h>
-
-#include "CatToy.h"
+#include <unistd.h>
 #include "MotionProfile.h"
 #include "ServoUpdater.h"
 #include "TerminalUI.h"
+#include "CatToy.h"
 
 
 using namespace std;
@@ -39,17 +39,19 @@ void CatToy::startUp() {
 	
 	cout << "Made it to startUp()\n";
 	
-	ServoUpdater sUpdater;
 	sUpdater.start();
 
+	sUpdater.goToPos(0.1, 0.1, 3); // go to mid-point at 3x speed for starters
+sleep(1);
+	sUpdater.goToPos(0.9, 0.9, 3); // go to mid-point at 3x speed for starters
+sleep(1);	
 
-	TerminalUI tUI(sUpdater);
+	sUpdater.goToPos(0.5, 0.5, 3); // go to mid-point at 3x speed for starters
+sleep(1);	
+	TerminalUI tUI(sUpdater);		// this is a loop that runs until we quit
 
-
-	while (true) {
-		delayMicroseconds(5000000);				// delay 5s
-		cout << "main thread running..\n";
-	}
+	sUpdater.stop();				// kill the updater thread
+	exit(0);						// exit the application
 	
 }
 

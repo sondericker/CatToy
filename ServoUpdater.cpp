@@ -39,9 +39,11 @@ ServoUpdater::ServoUpdater() {
 	int highVal = 2.5/10 * 0xfff;
 	cout << "lowVal = " << lowVal << " highVal = " << highVal << endl;
 		
-	curPosA = lowVal;
-	curPosB = lowVal;
-	goToPos (highVal, highVal, 1);
+	curPosA = 0;
+	curPosB = 0;
+	destPosA = 0;
+	destPosB = 0;
+	destSpeed = 3;
 	
 	pwm.setPWM(0,0x00, lowVal);				// send them back to the beginning to start
 	pwm.setPWM(1,0x00, lowVal);
@@ -84,6 +86,7 @@ void ServoUpdater::updater() {
 	
 	while (running) {
 		
+		//	cout << ".";
 		// grab the time we started the update loop
 		gettimeofday(&start, NULL);			// time of the first run
 		
@@ -112,6 +115,7 @@ void ServoUpdater::goToPos(double posA, double posB, double speed) {
 	destPosA = posA;
 	destPosB = posB;
 	destSpeed = speed;
+	cout << " CALLED posA=" << posA << " destPosA = " << destPosA << "  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 }
 
 
@@ -122,17 +126,20 @@ void ServoUpdater::updateServos() {
 	double distA = destPosA - curPosA;
 	double distB = destPosB - curPosB;
 
+	cout << "distA =" << distA << "destPosA = " << destPosA << "curPosA = " << curPosA << " distB = " << distB << endl;
+	cout << "fabs(distA) = " << fabs(distA) << " fabs(distB) = " << fabs(distB) << endl;
 	// if pan has farther to go
 	if (fabs(distA) >= fabs(distB)) {
-		
+		cout << "A>B ";
 		// calculate distance to move this cycle in steps
 		int cyclDist = ((STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED) * destSpeed) + STEPS_SLOWEST_SPEED;
 		int stepA = getStepFromPos(curPosA);
 		int stepB = getStepFromPos(curPosB);
-
+		
 		if (distA >= 0) {
 			// positive direction case - move pan the full amount
 			curPosA = getPosFromStep(stepA + cyclDist);
+			cout << " curPosA=" << curPosA << " destPosA = " << destPosA << " stepA = " << stepA << "  cyclDist == " << cyclDist << endl;
 			// move tilt less by a scaling factor
 			curPosB = getPosFromStep(stepB + ((distB/distA)*cyclDist));	// should take care of the sign automatically
 		} else {
@@ -143,6 +150,7 @@ void ServoUpdater::updateServos() {
 		}
 	// tilt has farther to go
 	} else {
+		cout << "B>A";
 		int cyclDist = ((STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED) * destSpeed) + STEPS_SLOWEST_SPEED;
 		int stepA = getStepFromPos(curPosA);
 		int stepB = getStepFromPos(curPosB);
@@ -157,20 +165,27 @@ void ServoUpdater::updateServos() {
 			curPosB = getPosFromStep(stepB - cyclDist);		
 			curPosA = getPosFromStep(stepA - ((distA/distB)*cyclDist));	// should take care of the sign automatically
 		}
-	}			
+	}		
+	
+	// and finally write the corPos in Steps values to the pwm driver
+	pwm.setPWM(0,0x00, getStepFromPos(curPosA));				// send them back to the beginning to start
+	pwm.setPWM(1,0x00, getStepFromPos(curPosB));
+
+	
+		
 }
 
 
 int ServoUpdater::getStepFromPos(double pos) {
 	int val = ((MAX_STEP - MIN_STEP)*pos) + MIN_STEP;
-	cout << "step from pos:" << val << endl;
+//	cout << "step from pos:" << val << endl;
 	return(val);
 }
 
 
 double ServoUpdater::getPosFromStep(int step) {
 	double val = (step - MIN_STEP) / static_cast<double>(MAX_STEP - MIN_STEP);
-	cout << "pos from step:" << val << endl;
+//	cout << "pos from step:" << val << endl;
 	return(val);
 }
 

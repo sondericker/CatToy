@@ -5,8 +5,6 @@
 
 class CatToy {
 
-
-
 	public:	
 	struct timeval start, end;
 	
@@ -16,5 +14,6 @@ class CatToy {
 	protected:
 	
 	private:
+	ServoUpdater sUpdater;
 
 };
