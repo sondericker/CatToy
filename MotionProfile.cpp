@@ -10,17 +10,21 @@ using namespace std;
 
 MotionProfile::MotionProfile() {
 	
+	numSteps = 0;
 	
+
+}
+
+
+void MotionProfile::addStep(double panPos, double tiltPos, double stepSpeed) {
+	cout << "Into add step\n";
 	
-	
+	pan[numSteps] = panPos;
+	tilt[numSteps] = tiltPos;
+	speed[numSteps] = stepSpeed;
+	numSteps++;
 	
 }
 
 
-void MotionProfile::addStep(int stepNumber, double panPos, double tiltPos, double timeToPos) {
-	
-	
-	
-	
-}
 

@@ -8,7 +8,7 @@
 #include "PWMDriver.h"
 
 #define STEPS_SLOWEST_SPEED 0.2
-#define STEPS_FASTEST_SPEED 5.0
+#define STEPS_FASTEST_SPEED 15.0
 #define MIN_STEP 250
 #define MAX_STEP 1078
 
@@ -26,6 +26,7 @@ class ServoUpdater {
 	double destSpeed;		// 0.0 - 1.0 representing slowest to fastest speed
 	double curPosA;			// pan current position
 	double curPosB;			// tilt current position	
+	bool moveComplete;
 	
 	protected:
 	
@@ -33,11 +34,8 @@ class ServoUpdater {
 	void updater();							// looping thread method
 	static void* threadHelper(void* arg);	// static method to launch thread
 	void updateServos();					// method to actually update servo pwms
-
-	
 	pthread_t myThread;
 	PWMDriver pwm;	
-
 	bool running;
 
 };

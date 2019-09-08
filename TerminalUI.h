@@ -1,4 +1,5 @@
 
+#define MANUAL_SPEED 0.1
 
 class TerminalUI {
 
@@ -14,7 +15,7 @@ class TerminalUI {
 	int tiltPosTicks;
 	
 	ServoUpdater* sUpdater;
-	
+	MotionProfile mProfile;
 	void driveToPosition();
 	void printMenu();
 	char getCommand();

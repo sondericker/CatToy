@@ -4,7 +4,9 @@ using namespace std;
 
 #include <iostream>
 #include <stdlib.h>
+#include <unistd.h>
 #include "ServoUpdater.h"
+#include "MotionProfile.h"
 #include "TerminalUI.h"
 
 
@@ -20,16 +22,19 @@ void TerminalUI::driveToPosition() {
 	bool running = true;
 
 	system("clear");
-	cout << "Use wasd to move the laser into position and then hit Enter to set." << endl;
+	cout << "Use wasd to move the laser into position and enter to set. Enter Q when finished." << endl;
 	
 	// Set terminal to raw mode 
 	system("stty raw"); 
 	//sUpdater.goToPos(0.5, 0.5, 1.0); 		// center the laser
 	// Loop while the laser is driven around
+	
+	sUpdater->destSpeed = MANUAL_SPEED;
+	
 	while (running) {
 
-			double distA = sUpdater->destPosA - sUpdater->curPosA;
-			double distB = sUpdater->destPosB - sUpdater->curPosB;	
+	//		double distA = sUpdater->destPosA - sUpdater->curPosA;
+	//		double distB = sUpdater->destPosB - sUpdater->curPosB;	
 
 		// Wait for single character 
 		char input = getchar(); 
@@ -39,54 +44,55 @@ void TerminalUI::driveToPosition() {
 			
 			case 'w':
 			x = sUpdater->getStepFromPos(sUpdater->destPosA);
-			if (x < MAX_STEP) x = x + sUpdater->destSpeed; 
-			sUpdater->destPosA = sUpdater->getPosFromStep(x);
-			cout << "step from destA = " << x << endl;
-			cout << "destPosA = " << sUpdater->destPosA << endl;
-			cout << "curPosA = " << sUpdater->curPosA << endl;
-			cout << "destSpeed = " << sUpdater->destSpeed << endl;
-			cout << "distA = " << distA << " distB = " << distB << endl;		
-			
+			if (x < MAX_STEP) x = x + ((sUpdater->destSpeed * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED); 
+//			sUpdater->destPosA = sUpdater->getPosFromStep(x);
+			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->destPosB, 0.2);				
 			break;
 			
 			case 'd':
 			x = sUpdater->getStepFromPos(sUpdater->destPosB);
-			if (x < MAX_STEP) x = x + sUpdater->destSpeed;
-			sUpdater->destPosB = sUpdater->getPosFromStep(x);			
+			if (x < MAX_STEP) x = x + ((sUpdater->destSpeed * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+			//sUpdater->destPosB = sUpdater->getPosFromStep(x);	
+			sUpdater->goToPos(sUpdater->destPosA, sUpdater->getPosFromStep(x), 0.2);	
 			break;
 			
 			case 's':
 			x = sUpdater->getStepFromPos(sUpdater->destPosA);
-			if (x > MIN_STEP) x = x - sUpdater->destSpeed;
-			sUpdater->destPosA = sUpdater->getPosFromStep(x);						
+			if (x > MIN_STEP) x = x - ((sUpdater->destSpeed * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+//			sUpdater->destPosA = sUpdater->getPosFromStep(x);	
+			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->destPosB, 0.2);	
+								
 			break;
 			
 			case 'a':
 			x = sUpdater->getStepFromPos(sUpdater->destPosB);
-			if (x > MIN_STEP) x = x - sUpdater->destSpeed;
-			sUpdater->destPosB = sUpdater->getPosFromStep(x);		
-			cout << "destPosB = " << sUpdater->destPosB << endl;
-
+			if (x > MIN_STEP) x = x - ((sUpdater->destSpeed * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+//			sUpdater->destPosB = sUpdater->getPosFromStep(x);	
+			sUpdater->goToPos(sUpdater->destPosA, sUpdater->getPosFromStep(x), 0.2);	
+				
+//			cout << "destPosB = " << sUpdater->destPosB << endl;
 			break;
 			
 			case '\r':
+			mProfile.addStep(sUpdater->curPosA, sUpdater->curPosB, 0.4);
+			cout << "step added" << endl;
+			break;
+			
+			case 'Q':
 				running=false;
 			break;
 			
-			default:
-			
-			break;
 		}
 		
-		// Echo input:
-		// cout << "--" << input << "--";
+
 				
 	}
 
 	// Reset terminal to normal "cooked" mode 
 	system("stty cooked"); 	
+	
 	// clean up the screen	
-//	system("clear");
+	//	system("clear");
 		
 }
 
@@ -127,6 +133,9 @@ char TerminalUI::getCommand() {
 		
 		cout << "Command:";
 		cin >> inText;
+		
+		cout << "inText length = " << inText.length() << endl;
+		
 		if (inText.length() == 1) {
 			
 		// if input is a proper command return with it. Otherwise call it out and get another.
@@ -189,6 +198,20 @@ void TerminalUI::runUI() {
 				break;
 
 			case 'r':
+			
+			struct timespec tp;
+				tp.tv_sec = 0;
+				tp.tv_nsec = 1000000;
+				
+				for (int x=0; x<mProfile.numSteps; x++) {
+					sUpdater->goToPos(mProfile.pan[x], mProfile.tilt[x], mProfile.speed[x]);
+					cout << "Moving to step:" << x << " pan:" << mProfile.pan[x] << " tilt:" << mProfile.tilt[x]  << " at speed:" << mProfile.speed[x] << endl;
+					while(!sUpdater->moveComplete) {						
+						nanosleep(&tp, NULL);						
+					}						
+					cout << "Finished move." << endl;				
+				}
+			
 				break;
 
 			case 's':
@@ -202,7 +225,7 @@ void TerminalUI::runUI() {
 				break;
 				
 			case '1':
-				sUpdater->goToPos(0.0, 0.0, 3.0);
+				sUpdater->goToPos(0.0, 0.0, 0.5);
 				cout << "1 typed" << endl;				
 				cout << "destPosA = " << sUpdater->destPosA << endl;
 				cout << "curPosA = " << sUpdater->curPosA << endl;
@@ -220,10 +243,10 @@ void TerminalUI::runUI() {
 				break;
 
 			case '3':
-				sUpdater->goToPos(1, 0, 2);
+				sUpdater->goToPos(1, 0, 0.8);
 				break;
 			case '4':
-				sUpdater->goToPos(0, 1, 4);
+				sUpdater->goToPos(0, 1, 1.0);
 				break;
 			}
 	}
