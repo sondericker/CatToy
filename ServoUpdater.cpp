@@ -43,7 +43,7 @@ ServoUpdater::ServoUpdater() {
 	curPosB = 0;
 	destPosA = 0;
 	destPosB = 0;
-	destSpeed = 3;
+	destSpeed = 0.5;
 	
 	pwm.setPWM(0,0x00, lowVal);				// send them back to the beginning to start
 	pwm.setPWM(1,0x00, lowVal);
@@ -54,6 +54,8 @@ ServoUpdater::ServoUpdater() {
 
 void ServoUpdater::start() {
 	
+	// initialize mutex lock
+	pthread_mutex_init(&lock, NULL);
 	// thread is started here via threadHelper
 	int err = pthread_create(&myThread, NULL, threadHelper, this);
 	
@@ -76,7 +78,9 @@ void* ServoUpdater::threadHelper(void* arg) {
 	
     thisObject->updater();
     
-    cout << "ServoUpdater thread stopped" << endl;
+    cout << "**** ServoUpdater thread stopped! ****" << endl;
+    pthread_mutex_destroy(&lock);
+
     return(0);
 	
 }
@@ -93,8 +97,9 @@ void ServoUpdater::updater() {
 		// grab the time we started the update loop
 		gettimeofday(&start, NULL);			// time of the first run
 		
+		// call the servo motion routine
 		updateServos();
-		
+				
 		// grab the time again and decide how long we want to sleep
 		// pwm writes are significant
 		gettimeofday(&end, NULL);
@@ -115,15 +120,23 @@ void ServoUpdater::updater() {
 }
 
 void ServoUpdater::goToPos(double posA, double posB, double speed) {
+	
+	pthread_mutex_lock(&lock);
+
 	destPosA = posA;
 	destPosB = posB;
 	destSpeed = speed;
-//	cout << " CALLED posA=" << posA << " destPosA = " << destPosA << "  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+	cout << " CALLED posA=" << posA << " destPosA = " << destPosA << " \n " << endl << endl;
 	moveComplete = false;
+	
+	pthread_mutex_unlock(&lock);
+
 }
 
 
 void ServoUpdater::updateServos() {
+
+	pthread_mutex_lock(&lock);
 	
 	// first, decide which axis has farther to go. It will move at the 
 	// commanded speed and the other will scale to arrive at the same time.
@@ -204,6 +217,9 @@ void ServoUpdater::updateServos() {
 	// and finally write the corPos in Steps values to the pwm driver
 	pwm.setPWM(0,0x00, getStepFromPos(curPosA));				// send them back to the beginning to start
 	pwm.setPWM(1,0x00, getStepFromPos(curPosB));
+	
+	pthread_mutex_unlock(&lock);
+
 }
 
 
@@ -217,6 +233,54 @@ double ServoUpdater::getPosFromStep(int step) {
 	double val = (step - MIN_STEP) / static_cast<double>(MAX_STEP - MIN_STEP);
 	return(val);
 }
+
+
+// synchronized getter methods for needed data
+
+double ServoUpdater::getdestPosA() {
+	pthread_mutex_lock(&lock);
+	double x = destPosA;
+	pthread_mutex_unlock(&lock);
+	return(x);
+}
+
+double ServoUpdater::getdestPosB() {
+	pthread_mutex_lock(&lock);
+	double x = destPosB;
+	pthread_mutex_unlock(&lock);
+	return(x);
+}
+
+double ServoUpdater::getcurPosA() {
+	pthread_mutex_lock(&lock);
+	double x = curPosA;
+	pthread_mutex_unlock(&lock);
+	return(x);
+}
+
+double ServoUpdater::getcurPosB() {
+	pthread_mutex_lock(&lock);
+	double x = curPosB;
+	pthread_mutex_unlock(&lock);
+	return(x);
+}
+
+bool ServoUpdater::getmoveComplete() {
+	pthread_mutex_lock(&lock);
+	bool x = moveComplete;
+	pthread_mutex_unlock(&lock);
+	return(x);
+}
+
+double ServoUpdater::getdestSpeed() {
+	pthread_mutex_lock(&lock);
+	double x = destSpeed;
+	pthread_mutex_unlock(&lock);
+	return(x);
+}
+
+
+	
 
 
 

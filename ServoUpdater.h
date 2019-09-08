@@ -21,12 +21,13 @@ class ServoUpdater {
 	void goToPos(double posA, double posB, double speed);	
 	int getStepFromPos(double pos);
 	double getPosFromStep(int step);
-	double destPosA;		// 0.0 - 1.0 pan destination position
-	double destPosB;		// 0.0 - 1.0 tilt destination position
-	double destSpeed;		// 0.0 - 1.0 representing slowest to fastest speed
-	double curPosA;			// pan current position
-	double curPosB;			// tilt current position	
-	bool moveComplete;
+
+	double getdestPosA();		// 0.0 - 1.0 pan destination position
+	double getdestPosB();		// 0.0 - 1.0 tilt destination position
+	double getdestSpeed();		// 0.0 - 1.0 representing slowest to fastest speed
+	double getcurPosA();			// pan current position
+	double getcurPosB();			// tilt current position	
+	bool getmoveComplete();	
 	
 	protected:
 	
@@ -37,5 +38,13 @@ class ServoUpdater {
 	pthread_t myThread;
 	PWMDriver pwm;	
 	bool running;
+	pthread_mutex_t lock;
+	
+	double destPosA;		// 0.0 - 1.0 pan destination position
+	double destPosB;		// 0.0 - 1.0 tilt destination position
+	double destSpeed;		// 0.0 - 1.0 representing slowest to fastest speed
+	double curPosA;			// pan current position
+	double curPosB;			// tilt current position	
+	bool moveComplete;	
 
 };

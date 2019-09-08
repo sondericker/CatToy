@@ -29,7 +29,7 @@ void TerminalUI::driveToPosition() {
 	//sUpdater.goToPos(0.5, 0.5, 1.0); 		// center the laser
 	// Loop while the laser is driven around
 	
-	sUpdater->destSpeed = MANUAL_SPEED;
+	
 	
 	while (running) {
 
@@ -43,38 +43,38 @@ void TerminalUI::driveToPosition() {
 		{
 			
 			case 'w':
-			x = sUpdater->getStepFromPos(sUpdater->destPosA);
-			if (x < MAX_STEP) x = x + ((sUpdater->destSpeed * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED); 
+			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
+			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED); 
 //			sUpdater->destPosA = sUpdater->getPosFromStep(x);
-			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->destPosB, 0.2);				
+			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED);				
 			break;
 			
 			case 'd':
-			x = sUpdater->getStepFromPos(sUpdater->destPosB);
-			if (x < MAX_STEP) x = x + ((sUpdater->destSpeed * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
+			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
 			//sUpdater->destPosB = sUpdater->getPosFromStep(x);	
-			sUpdater->goToPos(sUpdater->destPosA, sUpdater->getPosFromStep(x), 0.2);	
+			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED);	
 			break;
 			
 			case 's':
-			x = sUpdater->getStepFromPos(sUpdater->destPosA);
-			if (x > MIN_STEP) x = x - ((sUpdater->destSpeed * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
+			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
 //			sUpdater->destPosA = sUpdater->getPosFromStep(x);	
-			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->destPosB, 0.2);	
+			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED);	
 								
 			break;
 			
 			case 'a':
-			x = sUpdater->getStepFromPos(sUpdater->destPosB);
-			if (x > MIN_STEP) x = x - ((sUpdater->destSpeed * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
+			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
 //			sUpdater->destPosB = sUpdater->getPosFromStep(x);	
-			sUpdater->goToPos(sUpdater->destPosA, sUpdater->getPosFromStep(x), 0.2);	
+			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED);	
 				
 //			cout << "destPosB = " << sUpdater->destPosB << endl;
 			break;
 			
 			case '\r':
-			mProfile.addStep(sUpdater->curPosA, sUpdater->curPosB, 0.4);
+			mProfile.addStep(sUpdater->getcurPosA(), sUpdater->getcurPosB(), 0.4);
 			cout << "step added" << endl;
 			break;
 			
@@ -204,9 +204,10 @@ void TerminalUI::runUI() {
 				tp.tv_nsec = 1000000;
 				
 				for (int x=0; x<mProfile.numSteps; x++) {
+					cout << "Heading into gotopos from TerminalUI\n";
 					sUpdater->goToPos(mProfile.pan[x], mProfile.tilt[x], mProfile.speed[x]);
 					cout << "Moving to step:" << x << " pan:" << mProfile.pan[x] << " tilt:" << mProfile.tilt[x]  << " at speed:" << mProfile.speed[x] << endl;
-					while(!sUpdater->moveComplete) {						
+					while(!sUpdater->getmoveComplete()) {						
 						nanosleep(&tp, NULL);						
 					}						
 					cout << "Finished move." << endl;				
@@ -226,20 +227,11 @@ void TerminalUI::runUI() {
 				
 			case '1':
 				sUpdater->goToPos(0.0, 0.0, 0.5);
-				cout << "1 typed" << endl;				
-				cout << "destPosA = " << sUpdater->destPosA << endl;
-				cout << "curPosA = " << sUpdater->curPosA << endl;
-				cout << "destSpeed = " << sUpdater->destSpeed << endl;
-			//	cout << "distA = " << distA << " distB = " << distB << endl;						
+					
 				break;
 				
 			case '2':
 				sUpdater->goToPos(1.0, 1.0, 0.2);
-				cout << "2 typed" << endl;				
-				cout << "destPosA = " << sUpdater->destPosA << endl;
-				cout << "curPosA = " << sUpdater->curPosA << endl;
-				cout << "destSpeed = " << sUpdater->destSpeed << endl;
-			//	cout << "distA = " << distA << " distB = " << distB << endl;						
 				break;
 
 			case '3':
