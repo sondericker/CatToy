@@ -38,7 +38,7 @@ CatToy::CatToy()
 void CatToy::startUp() {
 	
 	cout << "Made it to startUp()\n";
-	
+	//ServoUpdater sUpdater;
 	sUpdater.start();
 
 	sUpdater.goToPos(0.1, 0.1, 3); // go to mid-point at 3x speed for starters
@@ -48,9 +48,15 @@ sleep(1);
 
 	sUpdater.goToPos(0.5, 0.5, 3); // go to mid-point at 3x speed for starters
 sleep(1);	
-	TerminalUI tUI(sUpdater);		// this is a loop that runs until we quit
 
+	TerminalUI tUI(&sUpdater);		// this is a loop that runs until we quit
+	
+	
+	cout << "EXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxiting for some reason." << endl;
+	sleep(2);
 	sUpdater.stop();				// kill the updater thread
+	cout << "exiting.." << endl;
+	sleep(2);
 	exit(0);						// exit the application
 	
 }

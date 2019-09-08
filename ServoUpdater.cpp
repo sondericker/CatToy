@@ -55,7 +55,7 @@ void ServoUpdater::start() {
 	
 	// thread is started here via threadHelper
 	int err = pthread_create(&myThread, NULL, threadHelper, this);
- 
+	
 	if (err != 0)
 	{
 		cout << "Error in thread creation: " << err << endl;
@@ -71,6 +71,7 @@ void ServoUpdater::stop() {
 void* ServoUpdater::threadHelper(void* arg) {
 	
 	ServoUpdater* thisObject = reinterpret_cast<ServoUpdater*>(arg);
+	
     thisObject->updater();
     
     cout << "ServoUpdater thread stopped" << endl;

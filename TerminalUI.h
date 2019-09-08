@@ -3,7 +3,7 @@
 class TerminalUI {
 
 	public:
-	TerminalUI(ServoUpdater sUp);
+	TerminalUI(ServoUpdater* sUp);
 
 	protected:
 
@@ -13,7 +13,7 @@ class TerminalUI {
 	double tiltPos;
 	int tiltPosTicks;
 	
-	ServoUpdater sUpdater;
+	ServoUpdater* sUpdater;
 	
 	void driveToPosition();
 	void printMenu();

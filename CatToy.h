@@ -15,5 +15,4 @@ class CatToy {
 	
 	private:
 	ServoUpdater sUpdater;
-
 };

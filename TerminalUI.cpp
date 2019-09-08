@@ -8,11 +8,9 @@ using namespace std;
 #include "TerminalUI.h"
 
 
-TerminalUI::TerminalUI(ServoUpdater sUp) {
+TerminalUI::TerminalUI(ServoUpdater* sUp) {
 
-	
-	sUpdater = sUp;
-	
+	sUpdater = sUp;	
 	runUI();
 	
 }
@@ -30,8 +28,8 @@ void TerminalUI::driveToPosition() {
 	// Loop while the laser is driven around
 	while (running) {
 
-			double distA = sUpdater.destPosA - sUpdater.curPosA;
-			double distB = sUpdater.destPosB - sUpdater.curPosB;	
+			double distA = sUpdater->destPosA - sUpdater->curPosA;
+			double distB = sUpdater->destPosB - sUpdater->curPosB;	
 
 		// Wait for single character 
 		char input = getchar(); 
@@ -40,34 +38,34 @@ void TerminalUI::driveToPosition() {
 		{
 			
 			case 'w':
-			x = sUpdater.getStepFromPos(sUpdater.destPosA);
-			if (x < MAX_STEP) x = x + sUpdater.destSpeed; 
-			sUpdater.destPosA = sUpdater.getPosFromStep(x);
+			x = sUpdater->getStepFromPos(sUpdater->destPosA);
+			if (x < MAX_STEP) x = x + sUpdater->destSpeed; 
+			sUpdater->destPosA = sUpdater->getPosFromStep(x);
 			cout << "step from destA = " << x << endl;
-			cout << "destPosA = " << sUpdater.destPosA << endl;
-			cout << "curPosA = " << sUpdater.curPosA << endl;
-			cout << "destSpeed = " << sUpdater.destSpeed << endl;
+			cout << "destPosA = " << sUpdater->destPosA << endl;
+			cout << "curPosA = " << sUpdater->curPosA << endl;
+			cout << "destSpeed = " << sUpdater->destSpeed << endl;
 			cout << "distA = " << distA << " distB = " << distB << endl;		
 			
 			break;
 			
 			case 'd':
-			x = sUpdater.getStepFromPos(sUpdater.destPosB);
-			if (x < MAX_STEP) x = x + sUpdater.destSpeed;
-			sUpdater.destPosB = sUpdater.getPosFromStep(x);			
+			x = sUpdater->getStepFromPos(sUpdater->destPosB);
+			if (x < MAX_STEP) x = x + sUpdater->destSpeed;
+			sUpdater->destPosB = sUpdater->getPosFromStep(x);			
 			break;
 			
 			case 's':
-			x = sUpdater.getStepFromPos(sUpdater.destPosA);
-			if (x > MIN_STEP) x = x - sUpdater.destSpeed;
-			sUpdater.destPosA = sUpdater.getPosFromStep(x);						
+			x = sUpdater->getStepFromPos(sUpdater->destPosA);
+			if (x > MIN_STEP) x = x - sUpdater->destSpeed;
+			sUpdater->destPosA = sUpdater->getPosFromStep(x);						
 			break;
 			
 			case 'a':
-			x = sUpdater.getStepFromPos(sUpdater.destPosB);
-			if (x > MIN_STEP) x = x - sUpdater.destSpeed;
-			sUpdater.destPosB = sUpdater.getPosFromStep(x);		
-			cout << "destPosB = " << sUpdater.destPosB << endl;
+			x = sUpdater->getStepFromPos(sUpdater->destPosB);
+			if (x > MIN_STEP) x = x - sUpdater->destSpeed;
+			sUpdater->destPosB = sUpdater->getPosFromStep(x);		
+			cout << "destPosB = " << sUpdater->destPosB << endl;
 
 			break;
 			
@@ -204,36 +202,30 @@ void TerminalUI::runUI() {
 				break;
 				
 			case '1':
-				sUpdater.goToPos(0.0, 0.0, 3.0);
+				sUpdater->goToPos(0.0, 0.0, 3.0);
 				cout << "1 typed" << endl;				
-				cout << "destPosA = " << sUpdater.destPosA << endl;
-				cout << "curPosA = " << sUpdater.curPosA << endl;
-				cout << "destSpeed = " << sUpdater.destSpeed << endl;
+				cout << "destPosA = " << sUpdater->destPosA << endl;
+				cout << "curPosA = " << sUpdater->curPosA << endl;
+				cout << "destSpeed = " << sUpdater->destSpeed << endl;
 			//	cout << "distA = " << distA << " distB = " << distB << endl;						
 				break;
 				
 			case '2':
-				sUpdater.goToPos(1.0, 1.0, 0.2);
+				sUpdater->goToPos(1.0, 1.0, 0.2);
 				cout << "2 typed" << endl;				
-				cout << "destPosA = " << sUpdater.destPosA << endl;
-				cout << "curPosA = " << sUpdater.curPosA << endl;
-				cout << "destSpeed = " << sUpdater.destSpeed << endl;
+				cout << "destPosA = " << sUpdater->destPosA << endl;
+				cout << "curPosA = " << sUpdater->curPosA << endl;
+				cout << "destSpeed = " << sUpdater->destSpeed << endl;
 			//	cout << "distA = " << distA << " distB = " << distB << endl;						
 				break;
 
 			case '3':
-				sUpdater.goToPos(1, 0, 2);
+				sUpdater->goToPos(1, 0, 2);
 				break;
 			case '4':
-				sUpdater.goToPos(0, 1, 4);
+				sUpdater->goToPos(0, 1, 4);
 				break;
-
-
 			}
-
 	}
-	
-	
-	
 }
 	
