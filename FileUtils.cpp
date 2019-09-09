@@ -1,4 +1,9 @@
 
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <list>
+#include <iostream>
 #include "MotionProfile.h"
 #include "FileUtils.h"
 
@@ -7,18 +12,57 @@ using namespace std;
 
 FileUtils::FileUtils() {
 	
-	
-	
 }
 
 
-void FileUtils::loadProfile() {
+MotionProfile FileUtils::loadProfile() {
 	
+	MotionProfile mp;
 	
+    ifstream file ( "file.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
+    string value;
+    list<string> values;
+    while ( file.good() )
+    {
+        getline ( file, value, ',' ); // read a string until next comma: http://www.cplusplus.com/reference/string/getline/
+        if (value.find('\n') != string::npos) {
+            split_line(value, "\n", values);
+        } else {
+            values.push_back(value);
+        }
+    }
+
+    list<string>::const_iterator it = values.begin();
+    for (it = values.begin(); it != values.end(); it++) {
+        string tmp = *it;
+        double d;
+        d = strtod(tmp.c_str(), NULL);
+        cout << "Double val: " << right << showpoint << d << endl;
+    }
+    
+    
+    return(mp);
+
+
 }
 
 void FileUtils::saveProfile(MotionProfile mp) {
+
 	
 	
-	
+}
+
+
+void FileUtils::split_line(std::string& line, std::string delim, std::list<std::string>& values)
+{
+    size_t pos = 0;
+    while ((pos = line.find(delim, (pos + 1))) != std::string::npos) {
+        string p = line.substr(0, pos);
+        values.push_back(p);
+        line = line.substr(pos + 1);
+    }
+
+    if (!line.empty()) {
+        values.push_back(line);
+    }
 }

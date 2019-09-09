@@ -101,16 +101,13 @@ void TerminalUI::driveToPosition() {
 
 void TerminalUI::printMenu() {
 	
-//	system("clear");
+	system("clear");
 		
 	cout << "Main Menu" << endl << endl;
 	
-	cout << "m - move laser to a position" << endl;
+	cout << "m - move laser / add profile points" << endl;
 	cout << "p - Print profile" << endl;
 	cout << "c - Clear profile" << endl;
-	cout << "a - Add steps to profile" << endl;
-	cout << "e - Edit profile step" << endl;
-	cout << "d - Delete profile step" << endl;
 	cout << "r - Run profile" << endl;
 	cout << "s - Save profile" << endl;
 	cout << "l - Load profile" << endl;
@@ -143,9 +140,6 @@ char TerminalUI::getCommand() {
 			if ((inText.front() == 'm') ||
 				(inText.front() == 'p') ||
 				(inText.front() == 'c') ||
-				(inText.front() == 'a') ||
-				(inText.front() == 'e') ||
-				(inText.front() == 'd') ||
 				(inText.front() == 'r') ||
 				(inText.front() == 's') ||
 				(inText.front() == '1') ||
@@ -159,7 +153,7 @@ char TerminalUI::getCommand() {
 			}
 		}		
 			
-		cout << "Invalid command. Valid options are m, p, c, a, e, d, r, s, q and l" << endl;
+		cout << "Invalid command. Valid options are m, p, c, r, s, q and l" << endl;
 			
 	}
 				
@@ -187,16 +181,6 @@ void TerminalUI::runUI() {
 			case 'c':
 			
 				break;
-				
-			case 'a':
-				break;
-
-			case 'e':
-				break;
-
-			case 'd':
-				break;
-
 			case 'r':
 			
 			struct timespec tp;
