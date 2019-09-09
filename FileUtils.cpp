@@ -40,23 +40,14 @@ MotionProfile FileUtils::loadProfile() {
         cout << "Double val: " << right << showpoint << d << endl;
     }
     
-    
     return(mp);
-
-
+    
 }
 
-void FileUtils::saveProfile(MotionProfile mp) {
-
-	
-	
-}
-
-
-void FileUtils::split_line(std::string& line, std::string delim, std::list<std::string>& values)
+void FileUtils::split_line(string& line, string delim, list<string>& values)
 {
     size_t pos = 0;
-    while ((pos = line.find(delim, (pos + 1))) != std::string::npos) {
+    while ((pos = line.find(delim, (pos + 1))) != string::npos) {
         string p = line.substr(0, pos);
         values.push_back(p);
         line = line.substr(pos + 1);
@@ -66,3 +57,24 @@ void FileUtils::split_line(std::string& line, std::string delim, std::list<std::
         values.push_back(line);
     }
 }
+
+
+void FileUtils::saveProfile(MotionProfile mp) {
+	
+   ofstream oFile ( "file.csv" ); 				// declare file stream: http://www.cplusplus.com/reference/iostream/ofstream/
+	
+
+	for (int x=0; x < mp.numSteps; x++) {
+		
+		oFile << to_string(mp.pan[x]) << "," <<
+			to_string(mp.tilt[x]) << "," <<
+			to_string(mp.speed[x]) << "," <<
+			to_string(mp.pause[x]) << "," << endl;
+					
+	}
+	
+	oFile.close();
+	
+}
+
+
