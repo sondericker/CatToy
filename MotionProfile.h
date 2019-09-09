@@ -11,6 +11,7 @@ class MotionProfile {
 	double pan[100] = {0.0};
 	double tilt[100] = {0.0};
 	double speed[100] = {0.0};
+	double pause[100] = {0.0};
 	
 	protected:
 	
