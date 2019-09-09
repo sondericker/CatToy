@@ -1,5 +1,9 @@
 
 
+#include <list>
+#include <string>
+
+using namespace std;
 
 
 class FileUtils {
@@ -12,7 +16,7 @@ class FileUtils {
 	protected:
 	
 	private:
-	void split_line(std::string& line, std::string delim, std::list<std::string>& values);
+	void split_line(string& line, string delim, list<std::string>& values);
 	
 };
 

@@ -33,12 +33,40 @@ MotionProfile FileUtils::loadProfile() {
     }
 
     list<string>::const_iterator it = values.begin();
+    int stepCounter = 0;
+    
     for (it = values.begin(); it != values.end(); it++) {
-        string tmp = *it;
         double d;
-        d = strtod(tmp.c_str(), NULL);
-        cout << "Double val: " << right << showpoint << d << endl;
+		
+			string tmp = *it;
+			d = strtod(tmp.c_str(), NULL);
+			cout << "Double val: " << right << showpoint << d << endl;
+			it++;
+			mp.pan[stepCounter] = d;
+			
+			tmp = *it;
+			d = strtod(tmp.c_str(), NULL);
+			cout << "Double val: " << right << showpoint << d << endl;
+			it++;
+			mp.tilt[stepCounter] = d;	
+					
+			tmp = *it;
+			d = strtod(tmp.c_str(), NULL);
+			cout << "Double val: " << right << showpoint << d << endl;
+			it++;			
+			mp.speed[stepCounter] = d;
+			
+			tmp = *it;
+			d = strtod(tmp.c_str(), NULL);
+			cout << "Double val: " << right << showpoint << d << endl;
+			it++;
+			mp.pause[stepCounter] = d;
+					
+			stepCounter++;
+			        
     }
+    
+    mp.numSteps = stepCounter;
     
     return(mp);
     

@@ -7,6 +7,7 @@ using namespace std;
 #include <unistd.h>
 #include "ServoUpdater.h"
 #include "MotionProfile.h"
+#include "FileUtils.h"
 #include "TerminalUI.h"
 
 
@@ -163,6 +164,9 @@ void TerminalUI::runUI() {
 	
 	char command;	
 	bool running = true;
+	FileUtils fileU;
+	
+	
 	
 	while (running) {
 		
@@ -181,6 +185,7 @@ void TerminalUI::runUI() {
 			case 'c':
 			
 				break;
+				
 			case 'r':
 			
 			struct timespec tp;
@@ -201,9 +206,13 @@ void TerminalUI::runUI() {
 				break;
 
 			case 's':
+				fileU.saveProfile(mProfile);
+				cout << "Motion Profile Saved." << endl;			
 				break;
 
-			case 'l':
+			case 'l':			
+				mProfile = fileU.loadProfile();
+				cout << "Motion Profile Loaded." << endl;
 				break;
 
 			case 'q':

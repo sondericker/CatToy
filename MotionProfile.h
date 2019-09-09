@@ -1,6 +1,6 @@
 
 
-#define default speed 0.8
+#define default_speed 0.8
 
 class MotionProfile {
 	
