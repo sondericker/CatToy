@@ -34,10 +34,6 @@ ServoUpdater::ServoUpdater() {
 	// init pwm driver which will handle both pwm outputs being used
 	pwm.initPWM(0x40);			// default i2c hat address
 	pwm.setPWMFreq(100);		// run the PWM at 100Hz	
-	
-	int lowVal = .5/10 * 0xfff;
-	int highVal = 2.5/10 * 0xfff;
-	cout << "lowVal = " << lowVal << " highVal = " << highVal << endl;
 		
 	curPosA = 0;
 	curPosB = 0;
@@ -45,8 +41,7 @@ ServoUpdater::ServoUpdater() {
 	destPosB = 0;
 	destSpeed = 0.5;
 	
-	pwm.setPWM(0,0x00, lowVal);				// send them back to the beginning to start
-	pwm.setPWM(1,0x00, lowVal);
+
 	delayMicroseconds(450000);				// delay 450ms	
 	moveComplete = true;
 
@@ -79,7 +74,6 @@ void* ServoUpdater::threadHelper(void* arg) {
     thisObject->updater();
     
     cout << "**** ServoUpdater thread stopped! ****" << endl;
-    pthread_mutex_destroy(&lock);
 
     return(0);
 	
@@ -117,6 +111,10 @@ void ServoUpdater::updater() {
 		nanosleep(&tp, NULL);		// updater runs every 1/UPDATE_FREQUENCY_HZ seconds
 
 	}
+	
+	// exiting thread!
+
+	
 }
 
 void ServoUpdater::goToPos(double posA, double posB, double speed) {

@@ -1,5 +1,5 @@
 
-#define MANUAL_SPEED 0.1
+#define MANUAL_SPEED 0.2
 
 class TerminalUI {
 

@@ -38,7 +38,7 @@ CatToy::CatToy()
 void CatToy::startUp() {
 	
 	cout << "Made it to startUp()\n";
-	//ServoUpdater sUpdater;
+
 	sUpdater.start();
 
 	TerminalUI tUI(&sUpdater);		// this is a loop that runs until we quit
