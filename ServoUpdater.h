@@ -8,7 +8,7 @@
 #include "PWMDriver.h"
 
 #define STEPS_SLOWEST_SPEED 0.2
-#define STEPS_FASTEST_SPEED 15.0
+#define STEPS_FASTEST_SPEED 30.0
 #define MIN_STEP 350
 #define MAX_STEP 1025
 

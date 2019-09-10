@@ -35,7 +35,9 @@ MotionProfile FileUtils::loadProfile() {
     list<string>::const_iterator it = values.begin();
     int stepCounter = 0;
     
-    for (it = values.begin(); it != values.end(); it++) {
+ //   cout << "values.size" << values.size_t() << endl;
+    
+    for (it = values.begin(); it != values.end(); ++it) {
         double d;
 		
 			string tmp = *it;
@@ -59,8 +61,8 @@ MotionProfile FileUtils::loadProfile() {
 			tmp = *it;
 			d = strtod(tmp.c_str(), NULL);
 			cout << "Double val: " << right << showpoint << d << endl;
-			it++;
 			mp.pause[stepCounter] = d;
+			cout << endl;
 					
 			stepCounter++;
 			        
@@ -68,6 +70,7 @@ MotionProfile FileUtils::loadProfile() {
     
     mp.numSteps = stepCounter;
     
+    file.close();
     return(mp);
     
 }

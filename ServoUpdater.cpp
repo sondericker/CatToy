@@ -126,6 +126,7 @@ void ServoUpdater::goToPos(double posA, double posB, double speed) {
 	destSpeed = speed;
 
 //	cout << " CALLED posA=" << posA << " destPosA = " << destPosA << " \n " << endl << endl;
+
 	moveComplete = false;
 	
 	pthread_mutex_unlock(&lock);

@@ -220,16 +220,16 @@ void TerminalUI::runUI() {
 				break;
 				
 			case '1':
-				sUpdater->goToPos(0.0, 0.0, 0.5);
+				sUpdater->goToPos(0.0, 0.0, 1.0);
 					
 				break;
 				
 			case '2':
-				sUpdater->goToPos(1.0, 1.0, 0.5);
+				sUpdater->goToPos(1.0, 1.0, 1.0);
 				break;
 
 			case '3':
-				sUpdater->goToPos(0.5, 0.5, 0.8);
+				sUpdater->goToPos(0.5, 0.5, 0.05);
 				break;
 			case '4':
 				sUpdater->goToPos(0, 1, 1.0);
