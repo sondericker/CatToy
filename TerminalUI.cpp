@@ -33,10 +33,6 @@ void TerminalUI::driveToPosition() {
 	
 	
 	while (running) {
-
-	//		double distA = sUpdater->destPosA - sUpdater->curPosA;
-	//		double distB = sUpdater->destPosB - sUpdater->curPosB;	
-
 		// Wait for single character 
 		char input = getchar(); 
 		int x;
@@ -46,21 +42,18 @@ void TerminalUI::driveToPosition() {
 			case 's':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
 			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED); 
-//			sUpdater->destPosA = sUpdater->getPosFromStep(x);
 			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED);				
 			break;
 			
 			case 'a':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
 			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
-			//sUpdater->destPosB = sUpdater->getPosFromStep(x);	
 			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED);	
 			break;
 			
 			case 'w':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
 			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
-//			sUpdater->destPosA = sUpdater->getPosFromStep(x);	
 			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED);	
 								
 			break;
@@ -68,15 +61,13 @@ void TerminalUI::driveToPosition() {
 			case 'd':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
 			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
-//			sUpdater->destPosB = sUpdater->getPosFromStep(x);	
 			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED);	
 				
-//			cout << "destPosB = " << sUpdater->destPosB << endl;
 			break;
 			
 			case '\r':
 			mProfile.addStep(sUpdater->getcurPosA(), sUpdater->getcurPosB(), 0.2);
-			cout << "step added" << endl;
+			cout << "step added. numSteps =" << mProfile.numSteps << endl;
 			break;
 			
 			case 'Q':
@@ -102,7 +93,7 @@ void TerminalUI::driveToPosition() {
 
 void TerminalUI::printMenu() {
 	
-	system("clear");
+//	system("clear");
 		
 	cout << "Main Menu" << endl << endl;
 	
@@ -191,7 +182,6 @@ void TerminalUI::runUI() {
 			struct timespec tp;
 				tp.tv_sec = 0;
 				tp.tv_nsec = 1000000;
-				for (int y=0; y<10; y++) {
 					for (int x = 0; x < mProfile.numSteps; x++) {
 	//					cout << "Heading into gotopos from TerminalUI\n";
 						sUpdater->goToPos(mProfile.pan[x], mProfile.tilt[x], mProfile.speed[x]);
@@ -201,21 +191,22 @@ void TerminalUI::runUI() {
 						}						
 						cout << "Finished move." << endl;				
 					}
-				}
 			
 				break;
 
 			case 's':
-				fileU.saveProfile(mProfile);
+				fileU.saveProfile(&mProfile);
 				cout << "Motion Profile Saved." << endl;			
 				break;
 
-			case 'l':			
-				mProfile = fileU.loadProfile();
-				cout << "Motion Profile Loaded." << endl;
+			case 'l':		
+				fileU.loadProfile(&mProfile);
+				cout << "Motion Profile Loaded." << endl;		
+				
 				break;
 
 			case 'q':
+			cout << "Got into Q and quitting." << endl;
 				running = false;
 				break;
 				

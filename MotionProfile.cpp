@@ -12,7 +12,6 @@ MotionProfile::MotionProfile() {
 	
 	numSteps = 0;
 	
-
 }
 
 
@@ -25,6 +24,8 @@ void MotionProfile::addStep(double panPos, double tiltPos, double stepSpeed) {
 	numSteps++;
 	
 }
+
+
 
 
 

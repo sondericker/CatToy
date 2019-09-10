@@ -10,8 +10,8 @@ class FileUtils {
 	
 	public:
 	FileUtils();
-	MotionProfile loadProfile();
-	void saveProfile(MotionProfile pf);
+	void loadProfile(MotionProfile* mp);
+	void saveProfile(MotionProfile* mp);
 	
 	protected:
 	

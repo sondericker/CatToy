@@ -28,7 +28,7 @@ class ServoUpdater {
 	double getcurPosA();			// pan current position
 	double getcurPosB();			// tilt current position	
 	bool getmoveComplete();	
-	
+	bool getRunning();
 	protected:
 	
 	private:

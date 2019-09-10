@@ -1,6 +1,4 @@
 
-
-
 #include <wiringPiI2C.h>
 #include <wiringPi.h>
 #include <time.h>
@@ -8,7 +6,6 @@
 #include <iostream>
 
 #include "PWMDriver.h"
-
 
 
 using namespace std;
@@ -23,14 +20,7 @@ PWMDriver::PWMDriver() {
 
 void PWMDriver::initPWM(int address) 			// 0x40 by default
 {
-	
-	cout << "attempting wiringPi I2C setup at address:" << address<< endl;
-	
-	
-	
     pwmHatFD = wiringPiI2CSetup(address);
-
-	cout << "I2C Setup should have ahppened" << endl;
 
     // zero all PWM ports
     resetAllPWM(0,0);

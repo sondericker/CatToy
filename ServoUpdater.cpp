@@ -113,11 +113,14 @@ void ServoUpdater::updater() {
 	}
 	
 	// exiting thread!
-
+	cout << "Exiting thread running = " << running << " running addr = " << &running << endl;
 	
 }
 
 void ServoUpdater::goToPos(double posA, double posB, double speed) {
+	
+	cout << "running addr = " << &running << endl;		
+	
 	
 	pthread_mutex_lock(&lock);
 
@@ -277,6 +280,13 @@ double ServoUpdater::getdestSpeed() {
 	double x = destSpeed;
 	pthread_mutex_unlock(&lock);
 	return(x);
+}
+
+bool ServoUpdater::getRunning() {
+	pthread_mutex_lock(&lock);
+	bool x = running;
+	pthread_mutex_unlock(&lock);
+	return(x);	
 }
 
 

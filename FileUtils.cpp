@@ -15,9 +15,9 @@ FileUtils::FileUtils() {
 }
 
 
-MotionProfile FileUtils::loadProfile() {
+void FileUtils::loadProfile(MotionProfile* mp) {
 	
-	MotionProfile mp;
+	//MotionProfile mp;
 	
     ifstream file ( "file.csv" ); // declare file stream: http://www.cplusplus.com/reference/iostream/ifstream/
     string value;
@@ -35,7 +35,9 @@ MotionProfile FileUtils::loadProfile() {
     list<string>::const_iterator it = values.begin();
     int stepCounter = 0;
     
- //   cout << "values.size" << values.size_t() << endl;
+
+    
+ //   cout << "values.size=" << values.size() << endl;
     
     for (it = values.begin(); it != values.end(); ++it) {
         double d;
@@ -44,34 +46,33 @@ MotionProfile FileUtils::loadProfile() {
 			d = strtod(tmp.c_str(), NULL);
 			cout << "Double val: " << right << showpoint << d << endl;
 			it++;
-			mp.pan[stepCounter] = d;
+			mp->pan[stepCounter] = d;
 			
 			tmp = *it;
 			d = strtod(tmp.c_str(), NULL);
 			cout << "Double val: " << right << showpoint << d << endl;
 			it++;
-			mp.tilt[stepCounter] = d;	
+			mp->tilt[stepCounter] = d;	
 					
 			tmp = *it;
 			d = strtod(tmp.c_str(), NULL);
 			cout << "Double val: " << right << showpoint << d << endl;
 			it++;			
-			mp.speed[stepCounter] = d;
+			mp->speed[stepCounter] = d;
 			
 			tmp = *it;
 			d = strtod(tmp.c_str(), NULL);
 			cout << "Double val: " << right << showpoint << d << endl;
-			mp.pause[stepCounter] = d;
+			mp->pause[stepCounter] = d;
 			cout << endl;
 					
 			stepCounter++;
 			        
     }
     
-    mp.numSteps = stepCounter;
+    mp->numSteps = stepCounter;
     
     file.close();
-    return(mp);
     
 }
 
@@ -90,17 +91,17 @@ void FileUtils::split_line(string& line, string delim, list<string>& values)
 }
 
 
-void FileUtils::saveProfile(MotionProfile mp) {
+void FileUtils::saveProfile(MotionProfile* mp) {
 	
    ofstream oFile ( "file.csv" ); 				// declare file stream: http://www.cplusplus.com/reference/iostream/ofstream/
 	
 
-	for (int x=0; x < mp.numSteps; x++) {
+	for (int x=0; x < mp->numSteps; x++) {
 		
-		oFile << to_string(mp.pan[x]) << "," <<
-			to_string(mp.tilt[x]) << "," <<
-			to_string(mp.speed[x]) << "," <<
-			to_string(mp.pause[x]) << "," << endl;
+		oFile << to_string(mp->pan[x]) << "," <<
+			to_string(mp->tilt[x]) << "," <<
+			to_string(mp->speed[x]) << "," <<
+			to_string(mp->pause[x]) << endl;
 					
 	}
 	
