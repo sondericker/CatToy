@@ -67,3 +67,4 @@ void PWMDriver::resetAllPWM(int on, int off)
     wiringPiI2CWriteReg8(pwmHatFD, __ALL_LED_OFF_L, off & 0xFF);
     wiringPiI2CWriteReg8(pwmHatFD, __ALL_LED_OFF_H, off >> 8);
 }
+

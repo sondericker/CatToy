@@ -1,6 +1,8 @@
 
 #define MANUAL_SPEED 0.2
 #define NO_PAUSE 0.0
+#define RUNNING_PROFILE_CYCLES 5
+#define RUNNING_SLEEP_TIME 120
 
 class TerminalUI {
 

@@ -8,10 +8,10 @@ class MotionProfile {
 	MotionProfile();
 	void addStep(double panPos, double tiltPos, double stepSpeed, double pause);
 	int numSteps;
-	double pan[200];
-	double tilt[200];
-	double speed[200];
-	double pause[200];
+	double pan[1000];
+	double tilt[1000];
+	double speed[1000];
+	double pause[1000];
 	
 	protected:
 	

@@ -26,6 +26,8 @@ void TerminalUI::driveToPosition() {
 	system("clear");
 	cout << "Use wasd to move the laser into position and enter to set. Enter Q when finished." << endl;
 	
+	sUpdater->setLaserOn();
+	
 	// Set terminal to raw mode 
 	system("stty raw"); 
 	//sUpdater.goToPos(0.5, 0.5, 1.0); 		// center the laser
@@ -89,6 +91,7 @@ void TerminalUI::driveToPosition() {
 			
 			case 'Q':
 				running=false;
+				sUpdater->setLaserOn();				
 			break;
 			
 		}		
@@ -111,7 +114,8 @@ void TerminalUI::printMenu() {
 	cout << "m - move laser / add profile points" << endl;
 	cout << "p - Print profile" << endl;
 	cout << "c - Clear profile" << endl;
-	cout << "r - Run profile" << endl;
+	cout << "t - Test profile" << endl;	
+	cout << "r - Run CatToy" << endl;
 	cout << "s - Save profile" << endl;
 	cout << "l - Load profile" << endl;
 	cout << "q - quit program" << endl;
@@ -144,6 +148,8 @@ char TerminalUI::getCommand() {
 				(inText.front() == 'p') ||
 				(inText.front() == 'c') ||
 				(inText.front() == 'r') ||
+				(inText.front() == 't') ||
+			
 				(inText.front() == 's') ||
 				(inText.front() == '1') ||
 				(inText.front() == '2') ||
@@ -156,7 +162,7 @@ char TerminalUI::getCommand() {
 			}
 		}		
 			
-		cout << "Invalid command. Valid options are m, p, c, r, s, q and l" << endl;
+		cout << "Invalid command. Valid options are m, p, c, r, t, s, q and l" << endl;
 			
 	}
 				
@@ -167,7 +173,8 @@ void TerminalUI::runUI() {
 	char command;	
 	bool running = true;
 	FileUtils fileU;
-	
+	struct timespec tp;
+
 	
 	
 	while (running) {
@@ -190,7 +197,39 @@ void TerminalUI::runUI() {
 				
 			case 'r':
 			
-			struct timespec tp;
+			
+				tp.tv_sec = 0;
+				tp.tv_nsec = 1000000;
+				
+				while(true) {
+					sUpdater->setLaserOn();							// turn the laser on and repeat the cycle
+					for (int y=0; y<RUNNING_PROFILE_CYCLES; y++) {
+						for (int x = 0; x < mProfile.numSteps; x++) {
+							
+							sUpdater->goToPos(mProfile.pan[x], mProfile.tilt[x], mProfile.speed[x], mProfile.pause[x]);						
+							cout << "Moving to step:" << x << " pan:" << mProfile.pan[x] <<
+							 " tilt:" << mProfile.tilt[x]  << " at speed:" << mProfile.speed[x]  <<
+							  " for pause:" << mProfile.pause[x] << endl;
+							  
+							while(!sUpdater->getmoveComplete()) {						
+								nanosleep(&tp, NULL);						
+							}						
+							cout << "Finished move." << endl;				
+						}
+					}
+					sUpdater->setLaserOff();		// turn the laser off and go to sleep for a while
+					sleep(RUNNING_SLEEP_TIME);					
+					
+				}
+					
+				sUpdater->setLaserOff();
+			
+				break;
+				
+			case 't':
+			
+				sUpdater->setLaserOn();
+			
 				tp.tv_sec = 0;
 				tp.tv_nsec = 1000000;
 					for (int x = 0; x < mProfile.numSteps; x++) {
@@ -205,6 +244,8 @@ void TerminalUI::runUI() {
 						}						
 						cout << "Finished move." << endl;				
 					}
+					
+				sUpdater->setLaserOff();
 			
 				break;
 

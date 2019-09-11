@@ -38,7 +38,7 @@ CatToy::CatToy()
 void CatToy::startUp() {
 	
 	cout << "Made it to startUp()\n";
-
+	
 	sUpdater.start();
 	
 	while (sUpdater.getRunning() != true) {
@@ -50,6 +50,7 @@ void CatToy::startUp() {
 	
 	sUpdater.stop();				// kill the updater thread
 	cout << "exiting.." << endl;
+	sUpdater.setLaserOff();
 	exit(0);						// exit the application
 	
 }

@@ -31,6 +31,10 @@ using namespace std;
 
 ServoUpdater::ServoUpdater() {
 	
+    wiringPiSetupGpio ();                   // setup for laser control
+	pinMode (21, OUTPUT);
+	setLaserOff();	
+	
 	// init pwm driver which will handle both pwm outputs being used
 	pwm.initPWM(0x40);			// default i2c hat address
 	pwm.setPWMFreq(100);		// run the PWM at 100Hz	
@@ -295,6 +299,13 @@ bool ServoUpdater::getRunning() {
 	return(x);	
 }
 
+void ServoUpdater::setLaserOn() {
+    digitalWrite (21, HIGH);
+}
+
+void ServoUpdater::setLaserOff() {
+    digitalWrite(21, LOW);
+}
 
 	
 

@@ -37,6 +37,7 @@ class PWMDriver {
 	void setPWMFreq(int freq);
 	void setPWM(int channel, int on, int off);
 	void resetAllPWM(int on, int off);
+
 	
 	protected:
 	

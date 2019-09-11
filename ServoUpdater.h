@@ -29,6 +29,8 @@ class ServoUpdater {
 	double getcurPosB();			// tilt current position	
 	bool getmoveComplete();	
 	bool getRunning();
+	void setLaserOn();
+	void setLaserOff();	
 	protected:
 	
 	private:
