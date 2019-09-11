@@ -5,6 +5,7 @@ using namespace std;
 #include <iostream>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string>
 #include "ServoUpdater.h"
 #include "MotionProfile.h"
 #include "FileUtils.h"
@@ -36,59 +37,69 @@ void TerminalUI::driveToPosition() {
 		// Wait for single character 
 		char input = getchar(); 
 		int x;
+		string mInput;
+		
 		switch (input) 
-		{
-			
+		{			
 			case 's':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
 			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED); 
-			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED);				
+			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED, NO_PAUSE);				
 			break;
 			
 			case 'a':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
 			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
-			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED);	
+			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED, NO_PAUSE);	
 			break;
 			
 			case 'w':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
 			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
-			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED);	
+			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED, NO_PAUSE);	
 								
 			break;
 			
 			case 'd':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
 			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
-			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED);	
+			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED, NO_PAUSE);	
 				
 			break;
 			
 			case '\r':
-			mProfile.addStep(sUpdater->getcurPosA(), sUpdater->getcurPosB(), 0.2);
+			
+			double spd, pause;
+			
+			system("stty cooked"); 	
+			cout << endl << endl;			
+			cout << "Enter speed (0.0 - 1.0):";
+			cin >> mInput;
+			spd = strtod(mInput.c_str(), NULL);
+			
+			cout << "Enter pause time in seconds (0.0 - 60.0):";
+			cin >> mInput;
+			pause = strtod(mInput.c_str(), NULL);
+			
+			mProfile.addStep(sUpdater->getcurPosA(), sUpdater->getcurPosB(), spd, pause);
 			cout << "step added. numSteps =" << mProfile.numSteps << endl;
+			system("stty raw"); 
+
 			break;
 			
 			case 'Q':
 				running=false;
 			break;
 			
-		}
-		
-
-				
+		}		
 	}
 
 	// Reset terminal to normal "cooked" mode 
 	system("stty cooked"); 	
 	
 	// clean up the screen	
-	//	system("clear");
-		
+	system("clear");		
 }
-
-
 
 
 void TerminalUI::printMenu() {
@@ -183,9 +194,12 @@ void TerminalUI::runUI() {
 				tp.tv_sec = 0;
 				tp.tv_nsec = 1000000;
 					for (int x = 0; x < mProfile.numSteps; x++) {
-	//					cout << "Heading into gotopos from TerminalUI\n";
-						sUpdater->goToPos(mProfile.pan[x], mProfile.tilt[x], mProfile.speed[x]);
-						cout << "Moving to step:" << x << " pan:" << mProfile.pan[x] << " tilt:" << mProfile.tilt[x]  << " at speed:" << mProfile.speed[x] << endl;
+						
+						sUpdater->goToPos(mProfile.pan[x], mProfile.tilt[x], mProfile.speed[x], mProfile.pause[x]);						
+						cout << "Moving to step:" << x << " pan:" << mProfile.pan[x] <<
+						 " tilt:" << mProfile.tilt[x]  << " at speed:" << mProfile.speed[x]  <<
+						  " for pause:" << mProfile.pause[x] << endl;
+						  
 						while(!sUpdater->getmoveComplete()) {						
 							nanosleep(&tp, NULL);						
 						}						
@@ -211,19 +225,19 @@ void TerminalUI::runUI() {
 				break;
 				
 			case '1':
-				sUpdater->goToPos(0.0, 0.0, 1.0);
+				sUpdater->goToPos(0.0, 0.0, 1.0, 0.0);
 					
 				break;
 				
 			case '2':
-				sUpdater->goToPos(1.0, 1.0, 1.0);
+				sUpdater->goToPos(1.0, 1.0, 1.0, 0.0);
 				break;
 
 			case '3':
-				sUpdater->goToPos(0.5, 0.5, 0.05);
+				sUpdater->goToPos(0.5, 0.5, 0.05, 0.0);
 				break;
 			case '4':
-				sUpdater->goToPos(0, 1, 1.0);
+				sUpdater->goToPos(0, 1, 1.0, 0.0);
 				break;
 			}
 	}

@@ -117,21 +117,19 @@ void ServoUpdater::updater() {
 	
 }
 
-void ServoUpdater::goToPos(double posA, double posB, double speed) {
-	
-	cout << "running addr = " << &running << endl;		
-	
+void ServoUpdater::goToPos(double posA, double posB, double speed, double pause) {
 	
 	pthread_mutex_lock(&lock);
 
 	destPosA = posA;
 	destPosB = posB;
 	destSpeed = speed;
+	destPause = pause;
 
 //	cout << " CALLED posA=" << posA << " destPosA = " << destPosA << " \n " << endl << endl;
 
 	moveComplete = false;
-	
+
 	pthread_mutex_unlock(&lock);
 
 }
@@ -158,9 +156,6 @@ void ServoUpdater::updateServos() {
 //		cout << "Arrived B" << endl;
 	}	
 	
-	if ((curPosA == destPosA) && (curPosB == destPosB)) {
-		moveComplete = true;
-	}
 
 	// if pan has farther to go
 	if (fabs(distA) >= fabs(distB)) {
@@ -220,6 +215,17 @@ void ServoUpdater::updateServos() {
 	// and finally write the corPos in Steps values to the pwm driver
 	pwm.setPWM(0,0x00, getStepFromPos(curPosA));				// send them back to the beginning to start
 	pwm.setPWM(1,0x00, getStepFromPos(curPosB));
+	
+	if ((curPosA == destPosA) && (curPosB == destPosB) && !moveComplete) {
+		
+		// before move is complete we have to sleep for the pause time
+		
+		
+		usleep (destPause * 1000000.0);
+		
+		moveComplete = true;
+	}
+	
 	
 	pthread_mutex_unlock(&lock);
 

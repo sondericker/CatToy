@@ -6,7 +6,7 @@ class MotionProfile {
 	
 	public:
 	MotionProfile();
-	void addStep(double panPos, double tiltPos, double stepSpeed);
+	void addStep(double panPos, double tiltPos, double stepSpeed, double pause);
 	int numSteps;
 	double pan[200];
 	double tilt[200];
