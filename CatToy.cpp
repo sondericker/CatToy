@@ -47,6 +47,7 @@ void CatToy::startUp() {
 	cout << endl;
 
 	TerminalUI tUI(&sUpdater);		// this is a loop that runs until we quit
+	tUI.runUI();
 	
 	sUpdater.stop();				// kill the updater thread
 	cout << "exiting.." << endl;

@@ -15,7 +15,6 @@ using namespace std;
 TerminalUI::TerminalUI(ServoUpdater* sUp) {
 
 	sUpdater = sUp;	
-	runUI();
 	
 }
 
@@ -292,9 +291,43 @@ void TerminalUI::runUI() {
 	
 
 
-void TerminalUI::autoRun() {
+void TerminalUI::autoRunUI() {
 
+	FileUtils fileU;
+	struct timespec tp;
+	
+				fileU.loadProfile(&mProfile);
+				cout << "Motion Profile Loaded." << endl;		
 
-
+	
+	
+				int numCycles, sleepTime;
+				
+				numCycles = AUTORUN_PROFILE_CYCLES;	
+				sleepTime = AUTORUN_SLEEP_TIME;
+			
+				tp.tv_sec = 0;
+				tp.tv_nsec = 1000000;
+				
+				while(true) {
+					sUpdater->setLaserOn();							// turn the laser on and repeat the cycle
+					for (int y=0; y<numCycles; y++) {
+						for (int x = 0; x < mProfile.numSteps; x++) {
+							
+							sUpdater->goToPos(mProfile.pan[x], mProfile.tilt[x], mProfile.speed[x], mProfile.pause[x]);						
+							cout << "Moving to step:" << x << " pan:" << mProfile.pan[x] <<
+							 " tilt:" << mProfile.tilt[x]  << " at speed:" << mProfile.speed[x]  <<
+							  " for pause:" << mProfile.pause[x] << endl;
+							  
+							while(!sUpdater->getmoveComplete()) {						
+								nanosleep(&tp, NULL);						
+							}						
+							cout << "Finished move." << endl;				
+						}
+					}
+					sUpdater->setLaserOff();		// turn the laser off and go to sleep for a while
+					sleep(sleepTime);					
+					
+				}
 
 }
