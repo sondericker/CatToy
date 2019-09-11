@@ -24,6 +24,7 @@ void TerminalUI::driveToPosition() {
 	bool running = true;
 
 	system("clear");
+
 	cout << "Use wasd to move the laser into position and enter to set. Enter Q when finished." << endl;
 	
 	sUpdater->setLaserOn();
@@ -175,7 +176,6 @@ void TerminalUI::runUI() {
 	struct timespec tp;
 
 	
-	
 	while (running) {
 		
 		command = getCommand();
@@ -290,3 +290,11 @@ void TerminalUI::runUI() {
 	}
 }
 	
+
+
+void TerminalUI::autoRun() {
+
+
+
+
+}

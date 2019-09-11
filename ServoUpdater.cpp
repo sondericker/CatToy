@@ -39,10 +39,10 @@ ServoUpdater::ServoUpdater() {
 	pwm.initPWM(0x40);			// default i2c hat address
 	pwm.setPWMFreq(100);		// run the PWM at 100Hz	
 		
-	curPosA = 0;
-	curPosB = 0;
-	destPosA = 0;
-	destPosB = 0;
+	curPosA = 0.5;
+	curPosB = 0.5;
+	destPosA = 0.5;
+	destPosB = 0.5;
 	destSpeed = 0.5;
 	
 
