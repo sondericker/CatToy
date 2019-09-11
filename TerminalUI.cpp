@@ -91,7 +91,7 @@ void TerminalUI::driveToPosition() {
 			
 			case 'Q':
 				running=false;
-				sUpdater->setLaserOn();				
+				sUpdater->setLaserOff();				
 			break;
 			
 		}		
@@ -197,13 +197,20 @@ void TerminalUI::runUI() {
 				
 			case 'r':
 			
+				int numCycles, sleepTime;
+				
+				cout << "Number of cycles per run:";
+				cin >> numCycles;
+				
+				cout << "Sleep time (sec) between runs:";
+				cin >> sleepTime;
 			
 				tp.tv_sec = 0;
 				tp.tv_nsec = 1000000;
 				
 				while(true) {
 					sUpdater->setLaserOn();							// turn the laser on and repeat the cycle
-					for (int y=0; y<RUNNING_PROFILE_CYCLES; y++) {
+					for (int y=0; y<numCycles; y++) {
 						for (int x = 0; x < mProfile.numSteps; x++) {
 							
 							sUpdater->goToPos(mProfile.pan[x], mProfile.tilt[x], mProfile.speed[x], mProfile.pause[x]);						
@@ -218,7 +225,7 @@ void TerminalUI::runUI() {
 						}
 					}
 					sUpdater->setLaserOff();		// turn the laser off and go to sleep for a while
-					sleep(RUNNING_SLEEP_TIME);					
+					sleep(sleepTime);					
 					
 				}
 					
@@ -250,7 +257,7 @@ void TerminalUI::runUI() {
 				break;
 
 			case 's':
-				fileU.saveProfile(&mProfile);
+				fileU.saveProfile(mProfile);
 				cout << "Motion Profile Saved." << endl;			
 				break;
 

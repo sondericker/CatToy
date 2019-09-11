@@ -11,7 +11,7 @@ class FileUtils {
 	public:
 	FileUtils();
 	void loadProfile(MotionProfile* mp);
-	void saveProfile(MotionProfile* mp);
+	void saveProfile(MotionProfile mp);
 	
 	protected:
 	
