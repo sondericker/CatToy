@@ -138,7 +138,6 @@ char TerminalUI::getCommand() {
 		cout << "Command:";
 		cin >> inText;
 		
-		cout << "inText length = " << inText.length() << endl;
 		
 		if (inText.length() == 1) {
 			

@@ -1,13 +1,13 @@
 
 
-#define UPDATER_FREQUENCY_HZ	   	50		// frequency the updater runs at
+#define UPDATER_FREQUENCY_HZ	   	40		// frequency the updater runs at
 #define PWM_HAT_ADDRESS 		0x40		// address of PWM hat hardware
 #define PWM_FREQ				100
 
 #include <pthread.h>
 #include "PWMDriver.h"
 
-#define STEPS_SLOWEST_SPEED 1.0
+#define STEPS_SLOWEST_SPEED 1
 #define STEPS_FASTEST_SPEED 30.0
 #define MIN_STEP 350
 #define MAX_STEP 1025
