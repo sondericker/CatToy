@@ -164,9 +164,9 @@ void ServoUpdater::updateServos() {
 	// if pan has farther to go
 	if (fabs(distA) >= fabs(distB)) {
 		// calculate distance to move this cycle in steps
-		int cyclDist = ((STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED) * destSpeed) + STEPS_SLOWEST_SPEED;
-		int stepA = getStepFromPos(curPosA);
-		int stepB = getStepFromPos(curPosB);
+		double cyclDist = ((STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED) * destSpeed) + STEPS_SLOWEST_SPEED;
+		double stepA = getStepFromPos(curPosA);
+		double stepB = getStepFromPos(curPosB);
 		
 		if (distA >= 0) {
 			// positive direction case - move pan the full amount
@@ -191,9 +191,9 @@ void ServoUpdater::updateServos() {
 		}
 	// tilt has farther to go
 	} else {
-		int cyclDist = ((STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED) * destSpeed) + STEPS_SLOWEST_SPEED;
-		int stepA = getStepFromPos(curPosA);
-		int stepB = getStepFromPos(curPosB);
+		double cyclDist = ((STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED) * destSpeed) + STEPS_SLOWEST_SPEED;
+		double stepA = getStepFromPos(curPosA);
+		double stepB = getStepFromPos(curPosB);
 
 		if (distB >= 0) {
 			// positive direction case
@@ -236,13 +236,13 @@ void ServoUpdater::updateServos() {
 }
 
 
-int ServoUpdater::getStepFromPos(double pos) {
-	int val = ((MAX_STEP - MIN_STEP)*pos) + MIN_STEP;
+double ServoUpdater::getStepFromPos(double pos) {
+	double val = ((MAX_STEP - MIN_STEP)*pos) + MIN_STEP;
 	return(val);
 }
 
 
-double ServoUpdater::getPosFromStep(int step) {
+double ServoUpdater::getPosFromStep(double step) {
 	double val = (step - MIN_STEP) / static_cast<double>(MAX_STEP - MIN_STEP);
 	return(val);
 }
@@ -300,11 +300,15 @@ bool ServoUpdater::getRunning() {
 }
 
 void ServoUpdater::setLaserOn() {
+	pthread_mutex_lock(&lock);
     digitalWrite (21, HIGH);
+	pthread_mutex_unlock(&lock);
 }
 
 void ServoUpdater::setLaserOff() {
+	pthread_mutex_lock(&lock);	
     digitalWrite(21, LOW);
+	pthread_mutex_unlock(&lock);    
 }
 
 	

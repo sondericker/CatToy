@@ -38,7 +38,7 @@ void TerminalUI::driveToPosition() {
 	while (running) {
 		// Wait for single character 
 		char input = getchar(); 
-		int x;
+		double x;
 		string mInput;
 		
 		switch (input) 

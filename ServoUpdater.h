@@ -7,10 +7,10 @@
 #include <pthread.h>
 #include "PWMDriver.h"
 
-#define STEPS_SLOWEST_SPEED 1
+#define STEPS_SLOWEST_SPEED 0.2
 #define STEPS_FASTEST_SPEED 30.0
-#define MIN_STEP 350
-#define MAX_STEP 1025
+#define MIN_STEP 350.0
+#define MAX_STEP 1025.0
 
 class ServoUpdater {
 	
@@ -19,8 +19,8 @@ class ServoUpdater {
 	void start();
 	void stop();
 	void goToPos(double posA, double posB, double speed, double pause);	
-	int getStepFromPos(double pos);
-	double getPosFromStep(int step);
+	double getStepFromPos(double pos);
+	double getPosFromStep(double step);
 
 	double getdestPosA();		// 0.0 - 1.0 pan destination position
 	double getdestPosB();		// 0.0 - 1.0 tilt destination position
