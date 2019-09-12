@@ -1,3 +1,2 @@
-cp /etc/network/interfaces.orig /etc/network/interfaces
-
-systemctl stop dhcpd.service
+sudo cp /etc/network/interfaces.orig /etc/network/interfaces
+sudo systemctl start dhcpd.service
