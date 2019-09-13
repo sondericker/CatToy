@@ -45,24 +45,24 @@ void TerminalUI::driveToPosition() {
 		{			
 			case 'd':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
-//			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED); 
-			if (x < MAX_STEP) x = x + MANUAL_STEP; 
+			if (x < MAX_STEP) x = x + MANUAL_STEP; 	
+//			cout << "Step = " << x << endl;
 
 			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED, NO_PAUSE);				
 			break;
 			
 			case 's':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
-//			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
 			if (x < MAX_STEP) x = x + MANUAL_STEP;
+//			cout << "Step = " << x << endl;
 
 			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED, NO_PAUSE);	
 			break;
 			
 			case 'a':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
-//			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
 			if (x > MIN_STEP) x = x - MANUAL_STEP;
+//			cout << "Step = " << x << endl;
 
 			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED, NO_PAUSE);	
 								
@@ -70,8 +70,8 @@ void TerminalUI::driveToPosition() {
 			
 			case 'w':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
-//			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
 			if (x > MIN_STEP) x = x - MANUAL_STEP;
+//			cout << "Step = " << x << endl;
 
 			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED, NO_PAUSE);	
 				
@@ -101,7 +101,6 @@ void TerminalUI::driveToPosition() {
 				running=false;
 				sUpdater->setLaserOff();				
 			break;
-			
 		}		
 	}
 

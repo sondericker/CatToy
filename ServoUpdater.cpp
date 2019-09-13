@@ -36,8 +36,8 @@ ServoUpdater::ServoUpdater() {
 	setLaserOff();	
 	
 	// init pwm driver which will handle both pwm outputs being used
-	pwm.initPWM(0x40);			// default i2c hat address
-	pwm.setPWMFreq(100);		// run the PWM at 100Hz	
+	pwm.initPWM(PWM_HAT_ADDRESS);			// default i2c hat address
+	pwm.setPWMFreq(PWM_FREQ);		// run the PWM at 100Hz	
 		
 	curPosA = 0.5;
 	curPosB = 0.5;
@@ -130,7 +130,7 @@ void ServoUpdater::goToPos(double posA, double posB, double speed, double pause)
 	destSpeed = speed;
 	destPause = pause;
 
-//	cout << " CALLED posA=" << posA << " destPosA = " << destPosA << " \n " << endl << endl;
+//	cout << " CALLED destPosA = " << destPosA << " destPosB = " << destPosB << endl << endl;
 
 	moveComplete = false;
 
@@ -243,7 +243,7 @@ double ServoUpdater::getStepFromPos(double pos) {
 
 
 double ServoUpdater::getPosFromStep(double step) {
-	double val = (step - MIN_STEP) / static_cast<double>(MAX_STEP - MIN_STEP);
+	double val = (step - MIN_STEP) / (MAX_STEP - MIN_STEP);
 	return(val);
 }
 
