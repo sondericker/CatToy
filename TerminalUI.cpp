@@ -43,28 +43,36 @@ void TerminalUI::driveToPosition() {
 		
 		switch (input) 
 		{			
-			case 's':
+			case 'd':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
-			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED); 
+//			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED); 
+			if (x < MAX_STEP) x = x + MANUAL_STEP; 
+
 			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED, NO_PAUSE);				
 			break;
 			
-			case 'a':
+			case 's':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
-			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+//			if (x < MAX_STEP) x = x + ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+			if (x < MAX_STEP) x = x + MANUAL_STEP;
+
 			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED, NO_PAUSE);	
 			break;
 			
-			case 'w':
+			case 'a':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosA());
-			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+//			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+			if (x > MIN_STEP) x = x - MANUAL_STEP;
+
 			sUpdater->goToPos(sUpdater->getPosFromStep(x), sUpdater->getdestPosB(), MANUAL_SPEED, NO_PAUSE);	
 								
 			break;
 			
-			case 'd':
+			case 'w':
 			x = sUpdater->getStepFromPos(sUpdater->getdestPosB());
-			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+//			if (x > MIN_STEP) x = x - ((sUpdater->getdestSpeed() * (STEPS_FASTEST_SPEED - STEPS_SLOWEST_SPEED)) + STEPS_SLOWEST_SPEED);
+			if (x > MIN_STEP) x = x - MANUAL_STEP;
+
 			sUpdater->goToPos(sUpdater->getdestPosA(), sUpdater->getPosFromStep(x), MANUAL_SPEED, NO_PAUSE);	
 				
 			break;
